@@ -1,5 +1,6 @@
 import { boot } from 'quasar/wrappers'
 import axios, { AxiosInstance } from 'axios'
+import { EventBus } from 'quasar'
 
 import Common from './common'
 
@@ -8,8 +9,10 @@ console.log('Execmode', Common.execmode)
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    $axios: AxiosInstance;
-    $api: AxiosInstance;
+    $axios: AxiosInstance
+    $api: AxiosInstance
+    $bus: EventBus
+
   }
 }
 
@@ -31,6 +34,12 @@ export default boot(({ app }) => {
   app.config.globalProperties.$api = api
   // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
   //       so you can easily perform requests against your app's API
+
+
+  const bus = new EventBus()
+
+  app.config.globalProperties.$bus = bus
+
 })
 
 export { api }

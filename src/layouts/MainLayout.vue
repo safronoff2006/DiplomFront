@@ -6,6 +6,9 @@
           <div style="font-size: 12px" v-html="titles" />
         </q-toolbar-title>
 
+        <label>Масштаб %</label>
+        <vue-number-input v-model="cardScale" :min="40" :max="120" :step="10" inline center controls size="small"
+          style="margin-left: 10px;margin-right: 20px;" @update:model-value="onCardScaleUpdate"></vue-number-input>
         <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
       </q-toolbar>
     </q-header>
@@ -23,16 +26,18 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useCounterStore } from 'stores/store'
+import VueNumberInput from '@chenfengyuan/vue-number-input'
 
 export default defineComponent({
   name: 'MainLayout',
 
-  components: {},
+  components: { VueNumberInput },
 
   data() {
     return {
       store: useCounterStore(),
       rightDrawerOpen: false,
+      cardScale: 90
     }
   },
 
@@ -46,6 +51,26 @@ export default defineComponent({
     toggleRightDrawer() {
       this.rightDrawerOpen = !this.rightDrawerOpen
     },
+
+    onCardScaleUpdate(newValue: number) {
+      console.log(newValue)
+      localStorage.cardScale = newValue
+
+      this.$bus.emit('scale-update')
+    }
   },
+
+  created() {
+    if (localStorage.cardScale) {
+      this.cardScale = Number(localStorage.cardScale)
+    } else {
+      localStorage.cardScale = 90
+      this.cardScale = Number(localStorage.cardScale)
+    }
+  },
+
+
+
+
 })
 </script>

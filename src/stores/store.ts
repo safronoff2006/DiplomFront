@@ -47,16 +47,26 @@ export const useCounterStore = defineStore('counter', {
       } else return '????'
     },
 
-    weight: (state) => (name: string) => {
+    weight: (state): (name: string) => number | ' ' | undefined => (name: string) => {
       const stat: Readonly<State> | undefined = state.scalesState.find(x => x.name == name)
       if (stat) {
         const st: StateExist | StateNone = stat.state
         if ('weight' in st) {
           return st.weight
-        }
+        } else return ' '
       } else return ' '
 
     },
+
+    typeScale: (state): (name: string) => string | undefined => (name: string) => {
+      const stat: Readonly<State> | undefined = state.scalesState.find(x => x.name == name)
+      if (stat) {
+        const st: StateExist | StateNone = stat.state
+        if ('type' in st) {
+          return st.type
+        } return undefined
+      } return undefined
+    }
   },
   actions: {
     increment() {
@@ -70,7 +80,6 @@ export const useCounterStore = defineStore('counter', {
 
       let first = true
       this.platformList.forEach((pn) => {
-        console.log(pn)
         if (this.validNames.includes(pn)) {
           if (first) respStr = respStr + 'name=' + pn
           else respStr = respStr + '&name=' + pn
@@ -78,12 +87,10 @@ export const useCounterStore = defineStore('counter', {
         }
       })
 
-      console.log(respStr)
 
       api
         .get(respStr)
         .then((resp) => {
-          console.log(resp.data)
           this.scalesState = resp.data.states
         })
         .catch((err) => console.error(err))
@@ -93,14 +100,12 @@ export const useCounterStore = defineStore('counter', {
       api
         .get('getValidNames')
         .then((resp) => {
-          console.log(resp.data)
           this.validNames = resp.data
           setInterval(() => this.getStates(), 250)
         })
         .catch((err) => console.error(err))
 
       if ('scales' in params) {
-        console.log(params)
         const scales: string = params.scales as string
         this.platformList = scales.split(',')
       }

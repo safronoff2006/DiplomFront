@@ -1,15 +1,15 @@
 <template>
   <div class="q-pa-md row items-start q-gutter-md">
-    <q-card class="my-card" style="zoom: 90%;">
+    <q-card class="my-card" :style="styleObject">
       <q-item>
         <q-item-section avatar>
           <q-avatar>
-            <img src="../assets/oil.png" />
+            <img src="/img/oil.webp" />
           </q-avatar>
         </q-item-section>
 
         <q-item-section>
-          <q-item-label>{{ title }}</q-item-label>
+          <q-item-label style="font-size: 16px;">{{ title }}</q-item-label>
           <!-- <q-item-label caption>Subhead</q-item-label> -->
         </q-item-section>
       </q-item>
@@ -23,34 +23,46 @@
               <tr>
                 <td></td>
                 <td>
-                  <img v-show="perimeter[1] === '+'" src="img/hgreen.jpg" alt="+" />
-                  <img v-show="perimeter[1] === '-'" src="img/hred.jpg" alt="-" />
-                  <img v-show="perimeter[1] === '?'" src="img/hgray.jpg" alt="?" />
+                  <div v-show="!(typeScale === 'rail')">
+                    <img v-show="perimeter[1] === '+'" src="img/hgreen.jpg" alt="+" />
+                    <img v-show="perimeter[1] === '-'" src="img/hred.jpg" alt="-" />
+                    <img v-show="perimeter[1] === '?'" src="img/hgray.jpg" alt="?" />
+                  </div>
                 </td>
                 <td></td>
               </tr>
               <tr>
                 <td>
-                  <img v-show="perimeter[2] === '+'" src="img/vgreen.jpg" alt="+" />
-                  <img v-show="perimeter[2] === '-'" src="img/vred.jpg" alt="-" />
-                  <img v-show="perimeter[2] === '?'" src="img/vgray.jpg" alt="?" />
+                  <div v-show="!(typeScale === 'rail')">
+                    <img v-show="perimeter[2] === '+'" src="img/vgreen.jpg" alt="+" />
+                    <img v-show="perimeter[2] === '-'" src="img/vred.jpg" alt="-" />
+                    <img v-show="perimeter[2] === '?'" src="img/vgray.jpg" alt="?" />
+                  </div>
                 </td>
                 <td>
-                  <img src="../assets/benzovoz.webp" style="height: 128px; width: 200px" v-show="true" />
-                  <img src="img/nocar.jpg" v-show="false" />
+                  <img src="../assets/benzovoz.webp" style="height: 128px; width: 200px"
+                    v-show="typeof weight === 'number' && typeScale === 'auto'" />
+                  <img src="../assets/rail.webp" style="height: 128px; width: 200px"
+                    v-show="typeof weight === 'number' && typeScale === 'rail'" />
+                  <img src="img/nocar.jpg"
+                    v-show="typeof weight == 'string' || typeof weight === 'undefined' || typeScale === undefined" />
                 </td>
                 <td>
-                  <img v-show="perimeter[3] === '+'" src="img/vgreen.jpg" alt="+" />
-                  <img v-show="perimeter[3] === '-'" src="img/vred.jpg" alt="-" />
-                  <img v-show="perimeter[3] === '?'" src="img/vgray.jpg" alt="?" />
+                  <div v-show="!(typeScale === 'rail')">
+                    <img v-show="perimeter[3] === '+'" src="img/vgreen.jpg" alt="+" />
+                    <img v-show="perimeter[3] === '-'" src="img/vred.jpg" alt="-" />
+                    <img v-show="perimeter[3] === '?'" src="img/vgray.jpg" alt="?" />
+                  </div>
                 </td>
               </tr>
               <tr>
                 <td></td>
                 <td>
-                  <img v-show="perimeter[0] === '+'" src="img/hgreen.jpg" alt="+" />
-                  <img v-show="perimeter[0] === '-'" src="img/hred.jpg" alt="-" />
-                  <img v-show="perimeter[0] === '?'" src="img/hgray.jpg" alt="?" />
+                  <div v-show="!(typeScale === 'rail')">
+                    <img v-show="perimeter[0] === '+'" src="img/hgreen.jpg" alt="+" />
+                    <img v-show="perimeter[0] === '-'" src="img/hred.jpg" alt="-" />
+                    <img v-show="perimeter[0] === '?'" src="img/hgray.jpg" alt="?" />
+                  </div>
                 </td>
               </tr>
               <tr>
@@ -76,6 +88,10 @@ export default defineComponent({
   data() {
     return {
       store: useCounterStore(),
+      styleObject: {
+        zoom: 100 + '%',
+        '-moz-transform': 'scale(1)'
+      }
     }
   },
   props: {
@@ -90,8 +106,31 @@ export default defineComponent({
     weight() {
       const item: ScaleInfo = <ScaleInfo>this.item
       return this.store.weight(item.name)
+    },
+    typeScale() {
+      const item: ScaleInfo = <ScaleInfo>this.item
+      return this.store.typeScale(item.name)
     }
   },
+
+  created() {
+    if (!localStorage.cardScale) localStorage.cardScale = 90
+
+    this.styleObject.zoom = localStorage.cardScale + '%'
+    const mscale = Number((Number(localStorage.cardScale) / 100).toFixed(2))
+    this.styleObject['-moz-transform'] = 'scale(' + mscale + ')'
+
+    this.$bus.on('scale-update', () => {
+      this.styleObject.zoom = localStorage.cardScale + '%'
+      const mscale = Number((Number(localStorage.cardScale) / 100).toFixed(2))
+      this.styleObject['-moz-transform'] = 'scale(' + mscale + ')'
+    })
+  },
+
+  beforeUnmount() {
+    this.$bus.off('scale-update')
+  },
+
 })
 </script>
 
