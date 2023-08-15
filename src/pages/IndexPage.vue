@@ -23,7 +23,7 @@ export default defineComponent({
     count() {
       return this.store.counter
     },
-    title() {
+    title() { // теst
       return this.store.title('TruckScale[1]')
     },
 

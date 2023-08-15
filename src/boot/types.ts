@@ -29,7 +29,7 @@ export interface State {
 }
 
 export interface ScaleInfo {
-  indx?: number
+  indx: number
   name: string
   humanName: string
 }
