@@ -10,7 +10,7 @@
 
         <q-item-section>
           <q-item-label style="font-size: 16px;">{{ title }}</q-item-label>
-          <!-- <q-item-label caption>Subhead</q-item-label> -->
+          <!-- <q-item-label caption>{{ name }}</q-item-label> -->
         </q-item-section>
       </q-item>
 
@@ -23,7 +23,7 @@
               <tr>
                 <td></td>
                 <td>
-                  <div v-show="!(typeScale === 'rail')">
+                  <div v-show="!(typeScale === 'rail' || name.toLowerCase().includes('rail'))">
                     <img v-show="perimeter[1] === '+'" src="img/hgreen.jpg" alt="+" />
                     <img v-show="perimeter[1] === '-'" src="img/hred.jpg" alt="-" />
                     <img v-show="perimeter[1] === '?'" src="img/hgray.jpg" alt="?" />
@@ -33,7 +33,7 @@
               </tr>
               <tr>
                 <td>
-                  <div v-show="!(typeScale === 'rail')">
+                  <div v-show="!(typeScale === 'rail' || name.toLowerCase().includes('rail'))">
                     <img v-show="perimeter[2] === '+'" src="img/vgreen.jpg" alt="+" />
                     <img v-show="perimeter[2] === '-'" src="img/vred.jpg" alt="-" />
                     <img v-show="perimeter[2] === '?'" src="img/vgray.jpg" alt="?" />
@@ -48,7 +48,7 @@
                     v-show="typeof weight == 'string' || typeof weight === 'undefined' || typeScale === undefined" />
                 </td>
                 <td>
-                  <div v-show="!(typeScale === 'rail')">
+                  <div v-show="!(typeScale === 'rail' || name.toLowerCase().includes('rail'))">
                     <img v-show="perimeter[3] === '+'" src="img/vgreen.jpg" alt="+" />
                     <img v-show="perimeter[3] === '-'" src="img/vred.jpg" alt="-" />
                     <img v-show="perimeter[3] === '?'" src="img/vgray.jpg" alt="?" />
@@ -58,7 +58,7 @@
               <tr>
                 <td></td>
                 <td>
-                  <div v-show="!(typeScale === 'rail')">
+                  <div v-show="!(typeScale === 'rail' || name.toLowerCase().includes('rail'))">
                     <img v-show="perimeter[0] === '+'" src="img/hgreen.jpg" alt="+" />
                     <img v-show="perimeter[0] === '-'" src="img/hred.jpg" alt="-" />
                     <img v-show="perimeter[0] === '?'" src="img/hgray.jpg" alt="?" />
@@ -110,6 +110,10 @@ export default defineComponent({
     typeScale() {
       const item: ScaleInfo = <ScaleInfo>this.item
       return this.store.typeScale(item.name)
+    },
+    name() {
+      const item: ScaleInfo = <ScaleInfo>this.item
+      return item.name
     }
   },
 
