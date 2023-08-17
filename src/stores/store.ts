@@ -64,8 +64,18 @@ export const useCounterStore = defineStore('counter', {
         const st: StateExist | StateNone = stat.state
         if ('type' in st) {
           return st.type
-        } return undefined
-      } return undefined
+        } else return undefined
+      } else return undefined
+    },
+
+    svetofor: (state): (name: string) => string | undefined => (name: string) => {
+      const stat: Readonly<State> | undefined = state.scalesState.find(x => x.name == name)
+      if (stat) {
+        const st: StateExist | StateNone = stat.state
+        if ('svetofor' in st) {
+          return st.svetofor
+        } else return undefined
+      } else return undefined
     }
   },
   actions: {

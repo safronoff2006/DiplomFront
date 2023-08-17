@@ -17,10 +17,18 @@
       <q-item>
         <q-item-section>
           <div style="text-align: center">
-            <!-- <img src="../assets/benzovoz.webp" style="height: 128px; width: 200px" /> -->
-
             <table>
               <tr>
+                <td rowspan="3">
+                  <div v-show="svetofor === 'R' || svetofor === 'G'">
+                    <div v-show="!(typeScale === 'rail' || name.toLowerCase().includes('rail'))">
+                      <img v-show="svetofor === 'R'" src="img/sfRed.jpg" alt="Красный"
+                        style="height: 100px; margin-right: 20px;">
+                      <img v-show="svetofor === 'G'" src="img/sfGreen.jpg" alt="Зеленый"
+                        style="height: 100px; margin-right: 20px;">
+                    </div>
+                  </div>
+                </td>
                 <td></td>
                 <td>
                   <div v-show="!(typeScale === 'rail' || name.toLowerCase().includes('rail'))">
@@ -32,8 +40,9 @@
                 <td></td>
               </tr>
               <tr>
+
                 <td>
-                  <div v-show="!(typeScale === 'rail' || name.toLowerCase().includes('rail'))">
+                  <div v-if="false">
                     <img v-show="perimeter[2] === '+'" src="img/vgreen.jpg" alt="+" />
                     <img v-show="perimeter[2] === '-'" src="img/vred.jpg" alt="-" />
                     <img v-show="perimeter[2] === '?'" src="img/vgray.jpg" alt="?" />
@@ -48,7 +57,7 @@
                     v-show="typeof weight == 'string' || typeof weight === 'undefined' || typeScale === undefined" />
                 </td>
                 <td>
-                  <div v-show="!(typeScale === 'rail' || name.toLowerCase().includes('rail'))">
+                  <div v-if="false">
                     <img v-show="perimeter[3] === '+'" src="img/vgreen.jpg" alt="+" />
                     <img v-show="perimeter[3] === '-'" src="img/vred.jpg" alt="-" />
                     <img v-show="perimeter[3] === '?'" src="img/vgray.jpg" alt="?" />
@@ -56,6 +65,7 @@
                 </td>
               </tr>
               <tr>
+
                 <td></td>
                 <td>
                   <div v-show="!(typeScale === 'rail' || name.toLowerCase().includes('rail'))">
@@ -67,7 +77,7 @@
               </tr>
               <tr>
                 <td colspan="3" style="color: crimson; font-size: x-large; font-weight: bold;">
-                  <div>{{ weight }}</div>
+                  <div :style="{ 'padding-left': paddingWeight + 'px' }">{{ weight }}</div>
                 </td>
               </tr>
             </table>
@@ -91,7 +101,8 @@ export default defineComponent({
       styleObject: {
         zoom: 100 + '%',
         '-moz-transform': 'scale(1)'
-      }
+      },
+
     }
   },
   props: {
@@ -99,6 +110,9 @@ export default defineComponent({
     item: Object,
   },
   computed: {
+    paddingWeight() {
+      return this.typeScale === 'auto' ? 70 : 0
+    },
     perimeter() {
       const item: ScaleInfo = <ScaleInfo>this.item
       return this.store.perimeters(item.name)
@@ -114,6 +128,10 @@ export default defineComponent({
     name() {
       const item: ScaleInfo = <ScaleInfo>this.item
       return item.name
+    },
+    svetofor() {
+      const item: ScaleInfo = <ScaleInfo>this.item
+      return this.store.svetofor(item.name)
     }
   },
 
@@ -141,5 +159,5 @@ export default defineComponent({
 <style lang="sass" scoped>
 .my-card
   width: 100%
-  max-width: 271px
+  max-width: 360px
 </style>

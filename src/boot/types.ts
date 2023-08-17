@@ -1,12 +1,10 @@
-import { ExecSyncOptionsWithStringEncoding } from 'child_process'
-
 console.log('Загружен types.ts')
 
 export interface Perimeters {
   in: string
   out: string
   left: string
-  right: ExecSyncOptionsWithStringEncoding
+  right: string
 }
 
 export interface StateExist {
@@ -14,6 +12,7 @@ export interface StateExist {
   type: string
   perimeters: Perimeters
   weight: number
+  svetofor: string
 }
 
 export interface StateNone {
