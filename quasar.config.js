@@ -146,6 +146,11 @@ module.exports = configure(function (ctx) {
         theme_color: '#027be3',
         icons: [
           {
+            src: 'icons/tanker.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+          {
             src: 'icons/icon-128x128.png',
             sizes: '128x128',
             type: 'image/png',
