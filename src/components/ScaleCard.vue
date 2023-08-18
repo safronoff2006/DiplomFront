@@ -111,7 +111,7 @@ export default defineComponent({
   },
   computed: {
     paddingWeight() {
-      return this.typeScale === 'auto' ? 70 : 0
+      return this.typeScale === 'auto' && (this.svetofor === 'R' || this.svetofor === 'G') ? 70 : 0
     },
     perimeter() {
       const item: ScaleInfo = <ScaleInfo>this.item
