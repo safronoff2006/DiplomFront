@@ -50,11 +50,11 @@
                 </td>
                 <td>
                   <img src="../assets/benzovoz.webp" style="height: 128px; width: 200px"
-                    v-show="typeof weight === 'number' && typeScale === 'auto'" />
+                    v-show="weightExist && typeScale === 'auto'" />
                   <img src="../assets/rail.webp" style="height: 128px; width: 200px"
-                    v-show="typeof weight === 'number' && typeScale === 'rail'" />
+                    v-show="weightExist && typeScale === 'rail'" />
                   <img src="img/nocar.jpg"
-                    v-show="typeof weight == 'string' || typeof weight === 'undefined' || typeScale === undefined" />
+                    v-show="typeof weight == 'string' || !weightExist || typeof weight === 'undefined' || typeScale === undefined" />
                 </td>
                 <td>
                   <div v-if="false">
@@ -121,6 +121,17 @@ export default defineComponent({
       const item: ScaleInfo = <ScaleInfo>this.item
       return this.store.weight(item.name)
     },
+
+    weightExist() {
+      let result = false
+      const item: ScaleInfo = <ScaleInfo>this.item
+      const w = this.store.weight(item.name)
+      if (typeof w === 'number')
+        if (w > 0) result = true
+
+      return result
+    },
+
     typeScale() {
       const item: ScaleInfo = <ScaleInfo>this.item
       return this.store.typeScale(item.name)

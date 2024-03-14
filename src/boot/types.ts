@@ -32,3 +32,8 @@ export interface ScaleInfo {
   name: string
   humanName: string
 }
+
+export interface Protokol {
+  protokol: string
+  endPoint: string
+}
